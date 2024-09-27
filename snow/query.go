@@ -32,13 +32,10 @@ type QueryElement interface{
 	String()string
 }
 
-type LogicalQuery struct{
-	LogicalOperator
-}
 
 // String to get the string value from the Logical Operator
-func (lo *LogicalQuery) String()string{
-	return string(lo.LogicalOperator)
+func (lo LogicalOperator) String()string{
+	return string(lo)
 }
 
 // FieldQuery struct to define name, value e operator
@@ -49,7 +46,7 @@ type FieldQuery struct {
 }
 
 // String to covert the FieldQuery in string
-func (fq *FieldQuery) String() string {
+func (fq FieldQuery) String() string {
 	return fmt.Sprintf("%s%s%s", fq.Name, fq.Operator, fq.Value)
 }
 
@@ -57,9 +54,9 @@ func (fq *FieldQuery) String() string {
 type Query []QueryElement
 
 // String to covert the Query in string
-func (q *Query) String() string{
+func (q Query) String() string{
 	var buffer bytes.Buffer
-	for _, item := range *q{
+	for _, item := range q{
 		buffer.WriteString(item.String())
 	}
 	return buffer.String()

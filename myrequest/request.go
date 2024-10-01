@@ -8,6 +8,8 @@ import (
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/rs/zerolog/log"
 )
 
 // HTTPClient is a struct that wrap an http.Client with additional configuration
@@ -48,11 +50,13 @@ func (h *HTTPClient) makeRequest(req *http.Request)(map[string]any, error){
 	if h.username != "" && h.password != ""{
 		req.SetBasicAuth(h.username, h.password)
 	}
+
 	resp, err := h.client.Do(req)
 	if err != nil{
 		return nil, err
 	}
 	defer resp.Body.Close()
+		log.Info().Str("Method", req.Method).Str("path", req.URL.Path).Str("query", req.URL.RawQuery).Int("Status", resp.StatusCode).Msg("Request")
 	if resp.StatusCode >= http.StatusBadRequest{
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
